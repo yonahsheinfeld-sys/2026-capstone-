@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EruvGuard — We Watch the Eruv So You Don't Have To</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-primary: #1565C0;
+    --blue-mid:     #1976D2;
+    --blue-light:   #42A5F5;
+    --blue-pale:    #BBDEFB;
+    --blue-bg:      #E3F2FD;
+    --white:        #FFFFFF;
+    --off-white:    #F4F9FF;
+    --text-dark:    #0D2B5E;
+    --text-mid:     #2C5282;
+    --text-muted:   #607D9E;
+    --nav-height:   64px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--nav-height);
+    background: var(--white);
+    border-bottom: 3px solid var(--blue-primary);
+    z-index: 1000;
+    display: flex; align-items: center;
+    padding: 0 28px;
+    gap: 12px;
+    box-shadow: 0 2px 16px rgba(21,101,192,0.12);
+  }
+  .nav-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--blue-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .nav-logo span { color: var(--blue-light); }
+  .nav-divider {
+    width: 1px; height: 30px;
+    background: var(--blue-pale);
+    flex-shrink: 0;
+  }
+  .nav-links {
+    display: flex; gap: 5px;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    display: inline-block;
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--blue-primary);
+    border: 1.5px solid var(--blue-pale);
+    background: var(--white);
+    white-space: nowrap;
+    transition: all 0.18s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active {
+    background: var(--blue-primary);
+    color: var(--white);
+    border-color: var(--blue-primary);
+  }
+
+  /* SECTIONS */
+  section { padding: 90px 72px 80px; scroll-margin-top: var(--nav-height); }
+
+  .section-eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--blue-light); margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 900; color: var(--blue-primary);
+    line-height: 1.1; margin-bottom: 14px;
+  }
+  .section-subtitle {
+    font-size: 1rem; color: var(--text-mid);
+    line-height: 1.8; max-width: 640px; margin-bottom: 44px;
+  }
+  .blue-bar {
+    width: 52px; height: 5px;
+    background: linear-gradient(90deg, var(--blue-primary), var(--blue-light));
+    border-radius: 4px; margin: 10px 0 28px;
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    background: linear-gradient(155deg, var(--blue-primary) 0%, var(--blue-mid) 55%, #2196F3 100%);
+    display: flex; align-items: center;
+    padding: 120px 72px 80px;
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFFFFF' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.09); pointer-events: none;
+  }
+  .hero-ring-1 { width: 700px; height: 700px; right: -200px; top: -200px; }
+  .hero-ring-2 { width: 480px; height: 480px; right: 0; top: -80px; border-color: rgba(255,255,255,0.06); }
+  .hero-ring-3 { width: 260px; height: 260px; left: 38%; bottom: 8%; border-color: rgba(255,255,255,0.05); }
+
+  .hero-content { position: relative; z-index: 2; max-width: 680px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.28);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 8px 20px; border-radius: 40px; margin-bottom: 30px;
+  }
+  .hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 900; color: var(--white);
+    line-height: 1.05; margin-bottom: 8px; letter-spacing: -0.02em;
+  }
+  .hero-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.1rem, 2.2vw, 1.7rem);
+    font-weight: 700; font-style: italic;
+    color: rgba(255,255,255,0.72); margin-bottom: 26px;
+  }
+  .hero-tagline {
+    font-size: 1rem; font-weight: 300;
+    color: rgba(255,255,255,0.78); line-height: 1.78;
+    max-width: 540px; margin-bottom: 44px;
+  }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-white {
+    background: var(--white); color: var(--blue-primary);
+    padding: 14px 34px; border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 0.82rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.14);
+    transition: transform 0.18s, box-shadow 0.18s;
+    display: inline-block;
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(0,0,0,0.2); }
+  .btn-outline {
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.4);
+    padding: 12px 32px; border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600; font-size: 0.82rem;
+    letter-spacing: 0.04em; text-decoration: none;
+    transition: all 0.18s; display: inline-block;
+  }
+  .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+  /* ABSTRACT */
+  #abstract { background: var(--off-white); }
+  .abstract-wrap { max-width: 880px; margin: 0 auto; }
+  .abstract-card {
+    background: var(--white); border-radius: 8px;
+    border: 1px solid var(--blue-pale);
+    padding: 52px 60px;
+    box-shadow: 0 8px 36px rgba(21,101,192,0.08);
+    position: relative; overflow: hidden;
+  }
+  .abstract-card::before {
+    content: '❝';
+    position: absolute; top: 14px; left: 26px;
+    font-size: 6.5rem; color: var(--blue-bg);
+    font-family: Georgia, serif; line-height: 1; pointer-events: none;
+  }
+  .abstract-card p {
+    font-size: 1rem; line-height: 1.95;
+    color: var(--text-mid); position: relative; z-index: 1;
+  }
+  .abstract-note {
+    text-align: center; margin-top: 18px;
+    font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.05em;
+  }
+
+  /* PROBLEM */
+  #problem { background: var(--white); }
+  .problem-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+  }
+  .problem-card {
+    background: var(--blue-bg); border-radius: 8px;
+    padding: 30px 28px; border-left: 5px solid var(--blue-primary);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .problem-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(21,101,192,0.11); }
+  .p-icon { font-size: 1.9rem; margin-bottom: 12px; }
+  .problem-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.97rem; font-weight: 700;
+    color: var(--blue-primary); margin-bottom: 9px;
+  }
+  .problem-card p { font-size: 0.92rem; color: var(--text-mid); line-height: 1.72; }
+
+  /* SOLUTION */
+  #solution { background: linear-gradient(135deg, var(--blue-primary) 0%, var(--blue-mid) 100%); }
+  #solution .section-eyebrow { color: var(--blue-pale); }
+  #solution .section-title { color: var(--white); }
+  #solution .section-subtitle { color: rgba(255,255,255,0.68); }
+  #solution .blue-bar { background: linear-gradient(90deg, #fff, var(--blue-pale)); }
+  .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+  .feature-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.17);
+    border-radius: 8px; padding: 28px 22px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .feature-card:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.38); }
+  .f-icon {
+    width: 44px; height: 44px; background: rgba(255,255,255,0.14);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 1.25rem; margin-bottom: 14px;
+  }
+  .feature-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.92rem; font-weight: 700; color: var(--white); margin-bottom: 8px;
+  }
+  .feature-card p { font-size: 0.86rem; color: rgba(255,255,255,0.62); line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  #how-it-works { background: var(--off-white); }
+  .steps-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+  .step-card {
+    background: var(--white); border-radius: 8px;
+    border: 1px solid var(--blue-pale);
+    padding: 30px 26px; display: flex; gap: 18px;
+    transition: box-shadow 0.2s;
+  }
+  .step-card:hover { box-shadow: 0 10px 30px rgba(21,101,192,0.1); }
+  .step-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.8rem; font-weight: 900;
+    color: var(--blue-pale); line-height: 1; min-width: 44px;
+  }
+  .step-tag {
+    display: inline-block; background: var(--blue-bg);
+    color: var(--blue-primary);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 20px; margin-bottom: 9px;
+  }
+  .step-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.97rem; font-weight: 700;
+    color: var(--blue-primary); margin-bottom: 7px;
+  }
+  .step-card p { font-size: 0.89rem; color: var(--text-mid); line-height: 1.75; }
+
+  /* IMPACT */
+  #impact { background: var(--white); }
+  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+  .stat-block {
+    background: linear-gradient(135deg, var(--blue-primary), var(--blue-mid));
+    border-radius: 8px; padding: 46px 28px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .stat-block::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 4px; background: var(--blue-light);
+  }
+  .stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.4rem; font-weight: 900;
+    color: var(--white); line-height: 1; margin-bottom: 10px;
+  }
+  .stat-lbl {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--blue-pale); margin-bottom: 10px;
+  }
+  .stat-note { font-size: 0.8rem; color: rgba(255,255,255,0.48); line-height: 1.5; }
+  .impact-note {
+    text-align: center; margin-top: 18px;
+    font-size: 0.8rem; color: var(--text-muted); font-style: italic;
+  }
+
+  /* RESEARCH */
+  #research { background: var(--blue-bg); }
+  .research-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+  .research-text p { font-size: 0.95rem; color: var(--text-mid); line-height: 1.87; margin-bottom: 16px; }
+  .research-text strong { color: var(--blue-primary); }
+  .source-credit {
+    margin-top: 18px; padding: 14px 18px;
+    background: var(--white); border-left: 4px solid var(--blue-primary);
+    border-radius: 0 6px 6px 0; font-size: 0.84rem; color: var(--text-mid);
+  }
+  .source-credit strong {
+    display: block; font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--blue-light); margin-bottom: 4px;
+  }
+  .compare-card {
+    background: var(--blue-primary); border-radius: 8px;
+    padding: 34px 30px; color: var(--white);
+  }
+  .compare-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.97rem; font-weight: 700; color: var(--white);
+    margin-bottom: 20px; padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.14);
+  }
+  .cmp-row {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 10px;
+    padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.84rem;
+  }
+  .cmp-row:last-child { border-bottom: none; }
+  .cmp-lbl { color: rgba(255,255,255,0.48); flex-shrink: 0; min-width: 90px; }
+  .cmp-them { color: #ff8a80; font-weight: 700; text-align: right; }
+  .cmp-us   { color: #69f0ae; font-weight: 700; text-align: right; }
+
+  /* TEAM */
+  #team { background: var(--white); }
+  .team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .team-card {
+    background: var(--white); border-radius: 8px;
+    border: 1px solid var(--blue-pale); overflow: hidden;
+    box-shadow: 0 4px 18px rgba(21,101,192,0.07);
+    transition: transform 0.22s, box-shadow 0.22s;
+  }
+  .team-card:hover { transform: translateY(-4px); box-shadow: 0 16px 38px rgba(21,101,192,0.13); }
+  .team-photo {
+    width: 100%; height: 200px;
+    background: linear-gradient(135deg, var(--blue-bg), var(--blue-pale));
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    border-bottom: 4px solid var(--blue-primary);
+    color: var(--text-muted);
+  }
+  .team-photo svg { margin-bottom: 10px; opacity: 0.38; }
+  .team-photo span { font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-light); }
+  .team-info { padding: 22px 24px 26px; }
+  .team-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.08rem; font-weight: 700; color: var(--blue-primary); margin-bottom: 3px;
+  }
+  .team-role {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.67rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--blue-light); margin-bottom: 14px;
+  }
+  .team-resp { list-style: none; }
+  .team-resp li {
+    font-size: 0.86rem; color: var(--text-mid);
+    padding: 4px 0 4px 15px; position: relative; line-height: 1.52;
+  }
+  .team-resp li::before { content: '–'; position: absolute; left: 0; color: var(--blue-light); }
+
+  /* PROGRESS */
+  #progress { background: linear-gradient(155deg, var(--blue-primary) 0%, #1565C0 100%); }
+  #progress .section-eyebrow { color: var(--blue-pale); }
+  #progress .section-title { color: var(--white); }
+  #progress .section-subtitle { color: rgba(255,255,255,0.62); }
+  #progress .blue-bar { background: linear-gradient(90deg, #fff, var(--blue-pale)); }
+  .progress-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+  .progress-slot {
+    background: rgba(255,255,255,0.07);
+    border: 2px dashed rgba(255,255,255,0.24);
+    border-radius: 8px; min-height: 195px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 26px 18px; text-align: center;
+    transition: background 0.2s, border-color 0.2s; cursor: pointer;
+  }
+  .progress-slot:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.48); }
+  .progress-slot svg { opacity: 0.28; margin-bottom: 12px; }
+  .slot-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem; font-weight: 700;
+    color: rgba(255,255,255,0.68); margin-bottom: 6px;
+  }
+  .slot-desc { font-size: 0.74rem; color: rgba(255,255,255,0.32); }
+  .progress-note { text-align: center; margin-top: 18px; font-size: 0.78rem; color: rgba(255,255,255,0.28); font-style: italic; }
+
+  /* AUDIENCE */
+  #audience { background: var(--off-white); }
+  .audience-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .audience-list { list-style: none; }
+  .audience-list li {
+    display: flex; align-items: flex-start; gap: 15px;
+    padding: 19px 0; border-bottom: 1px solid var(--blue-pale);
+  }
+  .audience-list li:last-child { border-bottom: none; }
+  .aud-icon {
+    width: 40px; height: 40px;
+    background: var(--blue-primary); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .aud-text strong {
+    display: block; font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem; font-weight: 700; color: var(--blue-primary); margin-bottom: 3px;
+  }
+  .aud-text span { font-size: 0.86rem; color: var(--text-mid); line-height: 1.65; }
+  .limits-box {
+    background: var(--white); border-radius: 8px;
+    border-top: 5px solid var(--blue-primary);
+    padding: 34px 30px;
+    box-shadow: 0 4px 18px rgba(21,101,192,0.07);
+  }
+  .limits-box h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem; font-weight: 700; color: var(--blue-primary); margin-bottom: 18px;
+  }
+  .lim-item { display: flex; gap: 11px; margin-bottom: 14px; align-items: flex-start; }
+  .lim-dot { width: 7px; height: 7px; background: var(--blue-light); border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .lim-item p { font-size: 0.89rem; color: var(--text-mid); line-height: 1.65; }
+
+  /* FUTURE */
+  #future { background: var(--white); }
+  .future-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+  .future-item {
+    background: var(--blue-bg); border-radius: 8px;
+    padding: 22px 24px; display: flex; gap: 14px; align-items: flex-start;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .future-item:hover { border-color: var(--blue-primary); background: var(--blue-pale); }
+  .f-arrow { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--blue-primary); font-size: 1rem; margin-top: 2px; }
+  .future-item h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem; font-weight: 700; color: var(--blue-primary); margin-bottom: 4px;
+  }
+  .future-item p { font-size: 0.85rem; color: var(--text-mid); line-height: 1.65; }
+
+  /* SOURCES */
+  #sources { background: var(--blue-bg); padding: 70px 72px; }
+  .source-item {
+    padding: 16px 0; border-bottom: 1px solid var(--blue-pale);
+    font-size: 0.9rem; color: var(--text-mid); line-height: 1.72;
+  }
+  .source-item:last-child { border-bottom: none; }
+  .source-item strong {
+    display: block; font-family: 'Montserrat', sans-serif;
+    font-weight: 700; color: var(--blue-primary); margin-bottom: 4px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--blue-primary);
+    color: rgba(255,255,255,0.48);
+    text-align: center; padding: 38px 72px; font-size: 0.82rem;
+  }
+  .footer-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem; font-weight: 900;
+    color: var(--white); margin-bottom: 8px;
+  }
+  .footer-logo span { color: var(--blue-pale); }
+
+  /* RESPONSIVE */
+  @media (max-width: 960px) {
+    section { padding: 66px 20px; }
+    nav { padding: 0 14px; gap: 8px; }
+    #hero { padding: 95px 20px 56px; }
+    .problem-grid,.features-grid,.steps-grid,.research-layout,
+    .team-grid,.progress-grid,.audience-split,.future-grid,.stats-row {
+      grid-template-columns: 1fr;
+    }
+    .abstract-card { padding: 36px 28px; }
+    #sources, footer { padding: 40px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY NAV -->
+<nav>
+  <div class="nav-logo">Eruv<span>Guard</span></div>
+  <div class="nav-divider"></div>
+  <ul class="nav-links">
+    <li><a href="#abstract">About</a></li>
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#progress">Progress</a></li>
+    <li><a href="#audience">Who It's For</a></li>
+    <li><a href="#future">Future Plans</a></li>
+    <li><a href="#sources">Sources</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-ring hero-ring-1"></div>
+  <div class="hero-ring hero-ring-2"></div>
+  <div class="hero-ring hero-ring-3"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Smart Eruv Monitoring Technology</div>
+    <h1 class="hero-title">EruvGuard</h1>
+    <div class="hero-sub">We Watch the Eruv So You Don't Have To</div>
+    <p class="hero-tagline">An automated, real-time eruv monitoring system — affordable, solar-powered, and built for communities of every size. No more weekly perimeter walks. No more missed breaks.</p>
+    <div class="hero-btns">
+      <a href="#solution" class="btn-white">See How It Works</a>
+      <a href="#team" class="btn-outline">Meet the Team</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABSTRACT -->
+<section id="abstract">
+  <div class="abstract-wrap">
+    <div class="section-eyebrow" style="text-align:center">Project Abstract</div>
+    <h2 class="section-title" style="text-align:center;max-width:none">The Scope of EruvGuard</h2>
+    <div class="blue-bar" style="margin:10px auto 28px"></div>
+    <div class="abstract-card">
+      <p>
+        EruvGuard is a student-developed engineering project designed to address a critical and underserved need within Modern Orthodox Jewish communities: the reliable, real-time monitoring of an eruv. An eruv is a symbolic boundary — typically a continuous wire or string — that permits certain activities on Shabbat and Jewish holidays. Because even a single break in this boundary renders the entire eruv invalid, maintaining its integrity is an ongoing religious and logistical responsibility. Traditional inspection methods require dedicated volunteers to physically walk or drive the eruv perimeter each week, an effort that consumes significant time and is prone to human error.
+        <br><br>
+        EruvGuard addresses this challenge through an integrated hardware-software system that uses an accelerometer to detect positional changes in the eruv line, a solar-powered ESP32 microcontroller to process and transmit data, and a web-based alert interface to instantly notify community leaders when a disruption is detected. The system stores excess solar energy in rechargeable lithium batteries, ensuring continuous operation regardless of weather conditions.
+        <br><br>
+        Existing automated eruv systems — such as those deployed in Manhattan — can cost upwards of $200,000 annually and are custom-built for specific eruvin, making them inaccessible to the vast majority of communities. EruvGuard's goal is to deliver a low-cost, universally adaptable, and low-maintenance alternative that makes automated eruv supervision achievable for communities of any size, anywhere.
+      </p>
+    </div>
+    <p class="abstract-note">≈ 250 words &nbsp;|&nbsp; Teaneck-Bergenfield Eruv Pilot Community</p>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="section-eyebrow">The Problem</div>
+  <h2 class="section-title">Why the Eruv Needs a Guardian</h2>
+  <div class="blue-bar"></div>
+  <p class="section-subtitle">The eruv is essential to Modern Orthodox Jewish life — but its physical nature makes it uniquely vulnerable. Communities deserve a better solution.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="p-icon">🕍</div>
+      <h4>Sacred &amp; Essential</h4>
+      <p>The eruv is foundational to Modern Orthodox life, permitting carrying on Shabbat and Yom Tov. Its validity directly affects every member of the community and their religious observance each week.</p>
+    </div>
+    <div class="problem-card">
+      <div class="p-icon">⚠️</div>
+      <h4>Fragile by Nature</h4>
+      <p>The eruv depends on an unbroken, continuous physical boundary. Even a single small break — caused by weather, fallen branches, or loose attachments — invalidates the entire structure immediately.</p>
+    </div>
+    <div class="problem-card">
+      <div class="p-icon">🔍</div>
+      <h4>Invisible Failures</h4>
+      <p>Breaks can occur without anyone noticing. A community may unknowingly carry on Shabbat, creating serious halachic concerns that could have been avoided with timely automated detection.</p>
+    </div>
+    <div class="problem-card">
+      <div class="p-icon">⏱️</div>
+      <h4>Time-Consuming Maintenance</h4>
+      <p>Weekly inspections of large eruvin demand hours of volunteer time — a burden that falls on a small, dedicated group week after week, with no backup if someone is unavailable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="section-eyebrow">Our Solution</div>
+  <h2 class="section-title">Introducing EruvGuard</h2>
+  <div class="blue-bar"></div>
+  <p class="section-subtitle">A smart, scalable monitoring system that keeps watch 24/7 — so community leaders can focus on what matters most.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="f-icon">⚡</div>
+      <h4>Real-Time Alerts</h4>
+      <p>The moment a break is detected, responsible parties receive an immediate notification with the approximate location — no waiting until the next scheduled inspection.</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">🔧</div>
+      <h4>Faster Repairs</h4>
+      <p>Instant alerts enable same-day response, ensuring the eruv is valid before Shabbat rather than after a problem is discovered too late to fix.</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">🚶</div>
+      <h4>Less Manual Work</h4>
+      <p>Eliminates exhaustive weekly perimeter walks. Inspectors spend their time on targeted repairs — not covering ground that's already being monitored automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">✅</div>
+      <h4>Improved Reliability</h4>
+      <p>Continuous automated monitoring means unnoticed breaks become a thing of the past — delivering greater halachic confidence and peace of mind for the entire community.</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">📡</div>
+      <h4>Scalable for Any Eruv</h4>
+      <p>Whether your eruv spans a single block or an entire town, EruvGuard adapts to any scale — a universally adaptable solution, not a custom, one-community system.</p>
+    </div>
+    <div class="feature-card">
+      <div class="f-icon">☮️</div>
+      <h4>Reduced Community Stress</h4>
+      <p>Eliminates weekly anxiety about eruv status. Community members enter Shabbat with confidence, knowing the eruv is actively watched around the clock.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works">
+  <div class="section-eyebrow">Technology</div>
+  <h2 class="section-title">How EruvGuard Works</h2>
+  <div class="blue-bar"></div>
+  <p class="section-subtitle">Four integrated components form a self-sustaining, always-on monitoring system that attaches directly to an existing eruv line.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div>
+        <div class="step-tag">Fall Detection</div>
+        <h4>Accelerometer Monitoring</h4>
+        <p>An accelerometer continuously tracks the position of the eruv line. When a break occurs, the device registers a significant positional change and immediately triggers an alert — distinguishing real breaks from normal environmental movement.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div>
+        <div class="step-tag">Alert System</div>
+        <h4>ESP32 Web Interface</h4>
+        <p>An ESP32 microcontroller processes signals from the accelerometer and transmits real-time alerts to an HTML-based web dashboard. The eruv manager receives an immediate, location-specific notification the moment a disruption is detected.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div>
+        <div class="step-tag">Renewable Energy</div>
+        <h4>Solar Panel Power</h4>
+        <p>A compact solar panel provides continuous, renewable power to the ESP32 and all connected components during daylight hours — eliminating manual battery replacements and keeping the system fully self-sufficient in the field.</p>
+      </div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div>
+        <div class="step-tag">Reserve Power</div>
+        <h4>Lithium Battery Backup</h4>
+        <p>Rechargeable lithium batteries store excess solar energy to ensure EruvGuard operates continuously through the night and on overcast days — so no break goes undetected regardless of conditions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact">
+  <div class="section-eyebrow">Projected Impact</div>
+  <h2 class="section-title">The Numbers Speak for Themselves</h2>
+  <div class="blue-bar"></div>
+  <p class="section-subtitle">Based on estimates for the Teaneck-Bergenfield Eruv — one of the largest community eruvin in New Jersey.</p>
+  <div class="stats-row">
+    <div class="stat-block">
+      <div class="stat-num">~200</div>
+      <div class="stat-lbl">Hours Saved Per Year</div>
+      <div class="stat-note">Estimated inspector time saved by eliminating manual perimeter checks annually</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">24/7</div>
+      <div class="stat-lbl">Active Monitoring</div>
+      <div class="stat-note">Continuous automated surveillance — day, night, and through adverse weather</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">Any</div>
+      <div class="stat-lbl">Eruv Size Supported</div>
+      <div class="stat-note">Designed to scale from a neighborhood block to a full metropolitan boundary</div>
+    </div>
+  </div>
+  <p class="impact-note">* Projections based on current inspection protocols for the Teaneck-Bergenfield Eruv; subject to real-world validation.</p>
+</section>
+
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-eyebrow">Research &amp; Context</div>
+  <h2 class="section-title">What Already Exists — and Why It's Not Enough</h2>
+  <div class="blue-bar"></div>
+  <div class="research-layout">
+    <div class="research-text">
+      <p>EruvGuard did not emerge in a vacuum. Before developing our system, we researched existing eruv monitoring technology and studied established eruv organizations to understand the current landscape of available solutions.</p>
+      <p>Some large-scale eruvin — most notably the <strong>Manhattan Eruv</strong> — have implemented forms of automated monitoring to assist with maintenance. These systems confirm that automated eruv supervision is both technically possible and halachically validated. The Manhattan Eruv's infrastructure serves as an important proof-of-concept, and we acknowledge their pioneering work.</p>
+      <p>However, existing automated systems carry significant limitations. Their high cost — estimated at approximately <strong>$200,000 per year</strong> — places them out of reach for the vast majority of communities. They are also custom-built for a single, specific eruv and cannot be redeployed without substantial reinvestment.</p>
+      <p>EruvGuard is designed to close this gap: an affordable, modular, and community-agnostic solution that any eruv can adopt without prohibitive financial investment.</p>
+      <div class="source-credit">
+        <strong>Acknowledged Source</strong>
+        Manhattan Eruv Organization — automated monitoring technology and infrastructure. Cited as a foundational precedent for large-scale eruv supervision systems.
+      </div>
+    </div>
+    <div class="compare-card">
+      <h4>EruvGuard vs. Existing Systems</h4>
+      <div class="cmp-row">
+        <span class="cmp-lbl">Annual Cost</span>
+        <span class="cmp-them">~$200,000</span>
+        <span class="cmp-us">Fraction of that</span>
+      </div>
+      <div class="cmp-row">
+        <span class="cmp-lbl">Portability</span>
+        <span class="cmp-them">Fixed / custom</span>
+        <span class="cmp-us">Universally adaptable</span>
+      </div>
+      <div class="cmp-row">
+        <span class="cmp-lbl">Scalability</span>
+        <span class="cmp-them">Single eruv only</span>
+        <span class="cmp-us">Any size eruv</span>
+      </div>
+      <div class="cmp-row">
+        <span class="cmp-lbl">Maintenance</span>
+        <span class="cmp-them">Requires specialists</span>
+        <span class="cmp-us">Low-maintenance</span>
+      </div>
+      <div class="cmp-row">
+        <span class="cmp-lbl">Community Reach</span>
+        <span class="cmp-them">Major metros only</span>
+        <span class="cmp-us">Any community</span>
+      </div>
+      <div class="cmp-row">
+        <span class="cmp-lbl">Power Source</span>
+        <span class="cmp-them">Grid-dependent</span>
+        <span class="cmp-us">Solar + battery</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="section-eyebrow">The Team</div>
+  <h2 class="section-title">Meet the Builders Behind EruvGuard</h2>
+  <div class="blue-bar"></div>
+  <p class="section-subtitle">EruvGuard was conceived and built by three dedicated students with a shared commitment to serving their community through engineering.</p>
+  <div class="team-grid">
+
+    <div class="team-card">
+      <div class="team-photo">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="18" r="11" stroke="#1565C0" stroke-width="2"/>
+          <path d="M6 46c0-11.046 8.954-20 20-20s20 8.954 20 20" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Add your photo here</span>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Yonah Sheinfeld</div>
+        <div class="team-role">Team Lead &amp; Hardware Engineer</div>
+        <ul class="team-resp">
+          <li>Overall project vision and team coordination</li>
+          <li>Accelerometer integration and fall detection logic</li>
+          <li>ESP32 hardware configuration and wiring</li>
+          <li>System testing and design iteration</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="18" r="11" stroke="#1565C0" stroke-width="2"/>
+          <path d="M6 46c0-11.046 8.954-20 20-20s20 8.954 20 20" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Add your photo here</span>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Juliet Reichman</div>
+        <div class="team-role">Software &amp; Interface Developer</div>
+        <ul class="team-resp">
+          <li>HTML-based web alert dashboard</li>
+          <li>ESP32 firmware and data transmission</li>
+          <li>Real-time notification logic</li>
+          <li>User interface design and testing</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="18" r="11" stroke="#1565C0" stroke-width="2"/>
+          <path d="M6 46c0-11.046 8.954-20 20-20s20 8.954 20 20" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Add your photo here</span>
+      </div>
+      <div class="team-info">
+        <div class="team-name">Daniel Jacob</div>
+        <div class="team-role">Power Systems &amp; Research Lead</div>
+        <ul class="team-resp">
+          <li>Solar panel and lithium battery integration</li>
+          <li>Power management and reserve storage design</li>
+          <li>Research into existing eruv monitoring systems</li>
+          <li>Community outreach and stakeholder interviews</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section id="progress">
+  <div class="section-eyebrow">Build Progress</div>
+  <h2 class="section-title">Our Journey So Far</h2>
+  <div class="blue-bar"></div>
+  <p class="section-subtitle">Add photos and descriptions of your progress milestones below — from early prototypes to field testing.</p>
+  <div class="progress-grid">
+    <div class="progress-slot">
+      <svg width="38" height="38" viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="4" stroke="white" stroke-width="2"/><path d="M4 28l10-10 6 6 6-8 10 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="14" r="3" stroke="white" stroke-width="2"/></svg>
+      <div class="slot-title">Add Image Here</div>
+      <div class="slot-desc">e.g. Initial prototype — breadboard setup and component testing</div>
+    </div>
+    <div class="progress-slot">
+      <svg width="38" height="38" viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="4" stroke="white" stroke-width="2"/><path d="M4 28l10-10 6 6 6-8 10 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="14" r="3" stroke="white" stroke-width="2"/></svg>
+      <div class="slot-title">Add Image Here</div>
+      <div class="slot-desc">e.g. 3D-printed housing — first enclosure design and iteration</div>
+    </div>
+    <div class="progress-slot">
+      <svg width="38" height="38" viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="4" stroke="white" stroke-width="2"/><path d="M4 28l10-10 6 6 6-8 10 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="14" r="3" stroke="white" stroke-width="2"/></svg>
+      <div class="slot-title">Add Image Here</div>
+      <div class="slot-desc">e.g. Solar panel wiring and battery integration test</div>
+    </div>
+    <div class="progress-slot">
+      <svg width="38" height="38" viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="4" stroke="white" stroke-width="2"/><path d="M4 28l10-10 6 6 6-8 10 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="14" r="3" stroke="white" stroke-width="2"/></svg>
+      <div class="slot-title">Add Image Here</div>
+      <div class="slot-desc">e.g. Accelerometer calibration and drop-test results</div>
+    </div>
+    <div class="progress-slot">
+      <svg width="38" height="38" viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="4" stroke="white" stroke-width="2"/><path d="M4 28l10-10 6 6 6-8 10 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="14" r="3" stroke="white" stroke-width="2"/></svg>
+      <div class="slot-title">Add Image Here</div>
+      <div class="slot-desc">e.g. Web dashboard alert interface — live demo screenshot</div>
+    </div>
+    <div class="progress-slot">
+      <svg width="38" height="38" viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" rx="4" stroke="white" stroke-width="2"/><path d="M4 28l10-10 6 6 6-8 10 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="14" r="3" stroke="white" stroke-width="2"/></svg>
+      <div class="slot-title">Add Image Here</div>
+      <div class="slot-desc">e.g. Field installation on the Teaneck-Bergenfield Eruv</div>
+    </div>
+  </div>
+  <p class="progress-note">Replace each placeholder with a photo and a brief description of that milestone.</p>
+</section>
+
+<!-- AUDIENCE -->
+<section id="audience">
+  <div class="section-eyebrow">Who It's For</div>
+  <h2 class="section-title">Target Audience &amp; Limitations</h2>
+  <div class="blue-bar"></div>
+  <div class="audience-split">
+    <div>
+      <p class="section-subtitle" style="margin-bottom:4px;">EruvGuard is built for any Jewish community with an eruv — large or small, urban or suburban. The size of your eruv does not matter.</p>
+      <ul class="audience-list">
+        <li>
+          <div class="aud-icon">🕍</div>
+          <div class="aud-text">
+            <strong>Rabbis &amp; Religious Authorities</strong>
+            <span>Receive instant, halachically relevant alerts and manage eruv validity with confidence — no more end-of-week uncertainty.</span>
+          </div>
+        </li>
+        <li>
+          <div class="aud-icon">👥</div>
+          <div class="aud-text">
+            <strong>Eruv Inspectors &amp; Volunteers</strong>
+            <span>Replace exhausting weekly perimeter walks with targeted, alert-driven maintenance — saving hundreds of hours each year.</span>
+          </div>
+        </li>
+        <li>
+          <div class="aud-icon">🏘️</div>
+          <div class="aud-text">
+            <strong>The Wider Jewish Community</strong>
+            <span>Any community member who relies on a valid eruv for Shabbat benefits from a more dependable, consistently maintained boundary.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="limits-box">
+      <h4>Known Limitations</h4>
+      <div class="lim-item">
+        <div class="lim-dot"></div>
+        <p><strong>Weight:</strong> If the device is too heavy, it could strain or snap thin eruv strings. The team is minimizing weight through design iteration and lighter materials.</p>
+      </div>
+      <div class="lim-item">
+        <div class="lim-dot"></div>
+        <p><strong>Size:</strong> A device that is too large or bulky could interfere with the eruv line. Future versions aim to significantly reduce form factor.</p>
+      </div>
+      <div class="lim-item">
+        <div class="lim-dot"></div>
+        <p><strong>Weather resistance:</strong> Current housing uses PLA filament, which is less weather-resistant. A planned upgrade to ALA filament will improve outdoor durability.</p>
+      </div>
+      <div class="lim-item">
+        <div class="lim-dot"></div>
+        <p><strong>Pressure sensing:</strong> Current version detects positional changes. A planned load cell will enable direct tension sensing for even greater accuracy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE -->
+<section id="future">
+  <div class="section-eyebrow">Looking Ahead</div>
+  <h2 class="section-title">Plans for the Future</h2>
+  <div class="blue-bar"></div>
+  <p class="section-subtitle">EruvGuard is a living project. Here's what the team is working toward in the next phase of development.</p>
+  <div class="future-grid">
+    <div class="future-item">
+      <div class="f-arrow">→</div>
+      <div>
+        <h5>Weather-Resistant Enclosure</h5>
+        <p>Replace PLA filament with ALA for improved outdoor durability against rain, UV exposure, and temperature extremes.</p>
+      </div>
+    </div>
+    <div class="future-item">
+      <div class="f-arrow">→</div>
+      <div>
+        <h5>Enhanced Power Storage</h5>
+        <p>Upgrade lithium battery capacity and solar panel efficiency to extend operational life through extended low-sunlight periods.</p>
+      </div>
+    </div>
+    <div class="future-item">
+      <div class="f-arrow">→</div>
+      <div>
+        <h5>Reduced Cost per Unit</h5>
+        <p>Identify lower-cost component alternatives without sacrificing reliability, making EruvGuard accessible to budget-conscious communities.</p>
+      </div>
+    </div>
+    <div class="future-item">
+      <div class="f-arrow">→</div>
+      <div>
+        <h5>Smaller &amp; Lighter Form Factor</h5>
+        <p>Redesign the hardware assembly to minimize strain on eruv strings and make installation easier and less invasive.</p>
+      </div>
+    </div>
+    <div class="future-item">
+      <div class="f-arrow">→</div>
+      <div>
+        <h5>Load Cell Integration</h5>
+        <p>Add a load cell sensor to detect tension and pressure changes directly along the eruv string for an additional layer of detection.</p>
+      </div>
+    </div>
+    <div class="future-item">
+      <div class="f-arrow">→</div>
+      <div>
+        <h5>Broader Community Deployment</h5>
+        <p>Pilot EruvGuard in additional communities beyond Teaneck-Bergenfield to validate scalability and gather real-world data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<section id="sources">
+  <div class="section-eyebrow">Acknowledgments &amp; Sources</div>
+  <h2 class="section-title" style="font-size:2rem;">Outside Sources</h2>
+  <div class="blue-bar"></div>
+  <div class="source-item">
+    <strong>Manhattan Eruv Organization</strong>
+    Acknowledged as a pioneer in large-scale, automated eruv monitoring technology. The Manhattan Eruv's infrastructure served as a key reference point in our research phase, confirming both the technical feasibility and halachic validity of automated eruv supervision. Cited for cost benchmarking (~$200,000/year) and as a precedent for the problem EruvGuard aims to solve more affordably.
+  </div>
+  <div class="source-item">
+    <strong>Teaneck-Bergenfield Eruv</strong>
+    Used as the primary pilot community and reference eruv for time-savings estimates. The scale and inspection protocols of this eruv informed projected annual hours saved and the design requirements for the EruvGuard prototype.
+  </div>
+  <div class="source-item">
+    <strong>ESP32 Microcontroller Documentation</strong>
+    Technical reference for the ESP32 hardware platform, including Wi-Fi and alert transmission capabilities and power management specifications used in the EruvGuard system design.
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Eruv<span>Guard</span></div>
+  <p>We Watch the Eruv So You Don't Have To</p>
+  <p style="margin-top:10px;">© 2026 EruvGuard Project — Yonah Sheinfeld · Juliet Reichman · Daniel Jacob</p>
+</footer>
+
+<script>
+  // Active nav pill highlights as you scroll
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) {
+          active.classList.add('active');
+          // Auto-scroll the nav pill into view
+          active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+    });
+  }, { rootMargin: '-35% 0px -60% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
